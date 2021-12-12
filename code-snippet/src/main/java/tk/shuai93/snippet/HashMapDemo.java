@@ -11,7 +11,12 @@ import java.util.HashMap;
 public class HashMapDemo {
 
     public static void main(String[] args) throws InterruptedException {
-        Long temp = 1636038040367L;
+
+        // 以下代码可以解释 Date 非安全日期工具类型。
+        // 如果 put HashMap 的 date 值修改 那么 HashMap 使用新值获取不到对应的 value。
+        // PS：如果需要获取初始值，需要遍历 HashMap
+
+        long temp = 1636038040367L;
 
 
         HashMap<Date, String> map = new HashMap<Date, String>();
@@ -43,9 +48,11 @@ public class HashMapDemo {
         System.out.println(date2.getTime());
         System.out.println(map);
         System.out.println(map.size());
+        // stream foreach HashMap
+        map.entrySet().forEach(System.out::println);
 
         System.out.println("----------------- 分割线 -----------------");
-
+        // (a, b) -> a + b  best practice  Integer::sum;
         TwoArgIntOperator addTwoInts = (a, b) -> a + b;
         int result = method(addTwoInts);
         System.out.println("Result: " + result);

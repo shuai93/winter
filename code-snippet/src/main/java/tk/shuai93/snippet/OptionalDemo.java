@@ -1,4 +1,4 @@
-package tk.shuai93;
+package tk.shuai93.snippet;
 
 import java.util.Optional;
 

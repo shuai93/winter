@@ -1,4 +1,4 @@
-package tk.shuai93;
+package tk.shuai93.snippet;
 
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
@@ -26,15 +26,15 @@ import java.util.stream.Stream;
 public class NpeDemo {
 
     public static void main(String[] args) {
+        // reference: https://hltj.me/java/2021/01/09/java-exercise-nulls.html
+        // 一些日常 npe 防御
         stringNpe(null);
         objectNpe(null);
         colNpe(null);
 
         var res = mapSome(1, x -> x+1);
-        System.out.println(res);
-
         var res1 = mapSome1(null, x -> x);
-        System.out.println(res1);
+        System.out.println("mapSome1 重构结果：" + res1);
 
 
         optionalNpe(null);
@@ -42,8 +42,47 @@ public class NpeDemo {
         optionalNpe(6);
 
         stringUtils(null);
+        objectUtils(null);
+        collectionsUtils(null);
 
 
+    }
+
+    private static void stringUtils(String temp){
+       // System.out.println(getChoice(null,false));
+       // System.out.println(getChoice("Middle", true));
+        System.out.println("重构 getChoice 结果为：" + getChoice1(null,false));
+        System.out.println("重构 getChoice 结果为：" + getChoice1("Middle", true));
+    }
+
+    private static void objectUtils(String temp){
+        System.out.println("----分割线----");
+
+       // System.out.println(toHex(10, false));
+        System.out.println("重构 toHex 结果为：" + toHex1(10, false));
+       // System.out.println(toHex(10, null));
+        System.out.println("重构 toHex 结果为：" + toHex1(10, null));
+
+        System.out.println("----分割线----");
+
+       // System.out.println(tomorrowOf(Instant.ofEpochSecond(1568568760)));
+        System.out.println("重构 tomorrowOf 结果为：" + tomorrowOf1(Instant.ofEpochSecond(1568568760)));
+
+       // System.out.println(tomorrowOf(null));
+        System.out.println("重构 tomorrowOf 结果为：" + tomorrowOf1(null));
+
+    }
+
+    private static void collectionsUtils(String temp){
+        System.out.println("----分割线----");
+
+        List<Integer> ids = List.of(101, 111, 191);
+        // System.out.println(getIdsString(null));
+        System.out.println("重构 getIdsString 结果为：" + getIdsString1(null));
+        // System.out.println(getIdsString(ids));
+        System.out.println("重构 getIdsString 结果为：" + getIdsString1(ids));
+
+        System.out.println("----分割线----");
     }
 
 
@@ -95,17 +134,17 @@ public class NpeDemo {
                 .orElse(null);
 
         // System.out.println("xInt = " + xInt);
-        // System.out.println("yInt = "+ yInt);
+         System.out.println("重构三元表达式结果为：yInt = "+ yInt);
 
         // 重构以下代码
         var x1 = (temp == null || temp % 2 != 0) ? null : temp / 2;
         var x2 = Optional.ofNullable(temp).filter(x -> x % 2 == 0).map( y -> y / 2).orElse(null);
-        System.out.println("x1 = " + x1);
-        System.out.println("x2 = " + x2);
+       // System.out.println("x1 = " + x1);
+        System.out.println("重构三元表达式结果为：x2 = " + x2);
 
-        System.out.println("-----------");
+        System.out.println("Object 非空取出并 print ");
         Optional.ofNullable(temp).ifPresent(System.out::println);
-        System.out.println("++++++++++");
+        System.out.println("-----分割线-----");
 
         if (x1 != null) {
             System.out.println(x1);
@@ -114,33 +153,12 @@ public class NpeDemo {
         System.out.println("----分割线----");
 
 
-        System.out.println(getUpperTitle(new Post()));
-        System.out.println(getUpperTitle1(new Post()));
+       // System.out.println(getUpperTitle(new Post()));
+        System.out.println("重构 getUpperTitle 结果为：" + getUpperTitle1(new Post()));
+       // System.out.println(getUpperTitle(null));
+        System.out.println("重构 getUpperTitle 结果为：" + getUpperTitle1(null));
 
-        System.out.println(getUpperTitle(null));
-        System.out.println(getUpperTitle1(null));
-        System.out.println("----分割线----");
 
-        List<Integer> ids = List.of(101, 111, 191);
-        System.out.println(getIdsString(null));
-        System.out.println(getIdsString1(null));
-        System.out.println(getIdsString(ids));
-        System.out.println(getIdsString1(ids));
-
-        System.out.println("----分割线----");
-        System.out.println(toHex(10, false));
-        System.out.println(toHex1(10, false));
-        System.out.println(toHex(10, null));
-        System.out.println(toHex1(10, null));
-        System.out.println("----分割线----");
-
-        System.out.println(tomorrowOf(Instant.ofEpochSecond(1568568760)));
-        System.out.println(tomorrowOf1(Instant.ofEpochSecond(1568568760)));
-
-        System.out.println(tomorrowOf(null));
-        System.out.println(tomorrowOf1(null));
-
-        System.out.println("----分割线----");
 
     }
 
@@ -224,19 +242,17 @@ public class NpeDemo {
         return  StringUtils.isNotEmpty(choice) ? choice : highest ? "High": "Low";
     }
 
-    private static void stringUtils(String temp){
-        System.out.println(getChoice(null,false));
-        System.out.println(getChoice("Middle", true));
-        System.out.println(getChoice1(null,false));
-        System.out.println(getChoice1("Middle", true));
+
+
+
+
+    static class Post {
+
+        @Nullable
+        String getTitle() {
+            return "hello";
+        }
     }
 }
 
 
-class Post {
-
-    @Nullable
-    String getTitle() {
-        return "hello";
-    }
-}

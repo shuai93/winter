@@ -7,11 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MybatisPlusConfig {
 
-    public static void main(String[] args) {
-        String projectPath = System.getProperty("user.dir");
-        System.out.println(projectPath);
-    }
-
     /**
      * 分页插件
      */
