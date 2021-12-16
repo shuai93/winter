@@ -1,7 +1,9 @@
 package tk.shuai93.snippet;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +14,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,7 +47,25 @@ public class NpeDemo {
         stringUtils(null);
         objectUtils(null);
         collectionsUtils(null);
+        var list1 = Arrays.asList(1, 2, -3, 9, 15);
+        var set = new HashSet<Integer>();
+        CollectionUtils.addAll(set, list1);
 
+        var map = Map.of("hello", 1, "world", 2);
+        System.out.println(map);
+        HashMap<Integer, String> sites = new HashMap<>();
+
+        // 往 HashMap 添加一些元素
+        sites.put(1, "Google");
+        sites.put(2, "Runoob");
+        sites.put(3, "Taobao");
+        System.out.println("sites HashMap: " + sites);
+
+        //检查 key 为 4 是否存在，不存在插入该 key/value 对
+        // 使用 ! 符号来对布尔结果取相反的值
+        if(!sites.containsKey(null)) {
+            sites.put(4, "Wiki");
+        }
 
     }
 
@@ -70,6 +91,13 @@ public class NpeDemo {
 
        // System.out.println(tomorrowOf(null));
         System.out.println("重构 tomorrowOf 结果为：" + tomorrowOf1(null));
+
+        System.out.println("重构 tomorrowOf3 结果为：" + tomorrowOf3(Instant.ofEpochSecond(1568568760)));
+        System.out.println("重构 tomorrowOf3 结果为：" + tomorrowOf3(null));
+
+        System.out.println("重构 tomorrowOf4 结果为：" + tomorrowOf4(Instant.ofEpochSecond(1568568760)));
+        System.out.println("重构 tomorrowOf4 结果为：" + tomorrowOf4(null));
+
 
     }
 
@@ -143,12 +171,16 @@ public class NpeDemo {
         System.out.println("重构三元表达式结果为：x2 = " + x2);
 
         System.out.println("Object 非空取出并 print ");
-        Optional.ofNullable(temp).ifPresent(System.out::println);
-        System.out.println("-----分割线-----");
-
         if (x1 != null) {
             System.out.println(x1);
         }
+
+        System.out.println("-----分割线0-----");
+        Optional.ofNullable(xInt).filter(x -> x % 2 == 0).map( y -> y / 2).ifPresent(System.out::println);
+        System.out.println("-----分割线0-----");
+        Optional.ofNullable(temp).ifPresent(System.out::println);
+        System.out.println("-----分割线-----");
+
 
         System.out.println("----分割线----");
 
@@ -157,8 +189,41 @@ public class NpeDemo {
         System.out.println("重构 getUpperTitle 结果为：" + getUpperTitle1(new Post()));
        // System.out.println(getUpperTitle(null));
         System.out.println("重构 getUpperTitle 结果为：" + getUpperTitle1(null));
+        System.out.println("重构 getUpperTitle2 结果为：" + getUpperTitle2(new Post()));
+        System.out.println("重构 getUpperTitle2 结果为：" + getUpperTitle2(null));
 
 
+
+    }
+    public static Instant tomorrowOf2( Instant x) {
+        if (ObjectUtils.isEmpty(x)) {
+            // log.debug("the base Date is null");
+            x = Instant.now();
+        }
+        return  x.plus(Duration.ofDays(1));
+    }
+    public static Instant tomorrowOf3( Instant x) {
+
+        return Optional.ofNullable(x).
+                map(obj -> obj.plus(Duration.ofDays(1))).
+                orElseGet(() -> {System.out.println("the base Date is null");return Instant.now().plus(Duration.ofDays(1));});
+
+    }
+
+    public static Instant tomorrowOf4( Instant x) {
+
+        // return  ObjectUtils.getFirstNonNull(
+        //         () -> x,
+        //         () -> {
+        //             System.out.println("the base Date is null");
+        //             return Instant.now();
+        //         }).plus(Duration.ofDays(1));
+
+        return ObjectUtils.getIfNull(x,
+                () -> {
+                    System.out.println("the base Date is null");
+                    return Instant.now();
+                }).plus(Duration.ofDays(1));
 
     }
 
@@ -205,8 +270,22 @@ public class NpeDemo {
     }
 
     private static String getUpperTitle1(Post post) {
+        return Optional.ofNullable(post)
+                .map(Post::getTitle)
+                .orElseGet(() -> {
+                    System.out.println("no title");
+                    return "- UNTITLED -";
+                })
+                .toUpperCase();
+    }
 
-        return Optional.ofNullable(post).map(Post::getTitle).orElse("- UNTITLED -").toUpperCase();
+    @NonNull
+    private static String getUpperTitle2(@Nullable Post post) {
+        var temp = Optional.ofNullable(post).flatMap(item -> Optional.ofNullable(item.getTitle()));
+        if (temp.equals(Optional.empty())) {
+            // log.warning("no title");
+        }
+        return temp.orElse("- UNTITLED -").toUpperCase();
 
     }
 
@@ -233,12 +312,6 @@ public class NpeDemo {
     }
 
     private static String getChoice1(String choice, boolean highest) {
-        if (choice != null && !choice.isEmpty())
-            return choice;
-
-        if (highest)
-            return "High";
-
         return  StringUtils.isNotEmpty(choice) ? choice : highest ? "High": "Low";
     }
 
