@@ -1,4 +1,4 @@
-package tk.shuai93.winter.conf;
+package tk.shuai93.winter.common.enums.conf;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;

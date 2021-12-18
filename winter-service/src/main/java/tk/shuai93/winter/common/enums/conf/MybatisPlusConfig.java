@@ -1,10 +1,12 @@
-package tk.shuai93.winter.conf;
+package tk.shuai93.winter.common.enums.conf;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+// @MapperScan("tk.shuai93.winter.common.enums.mapper")
 public class MybatisPlusConfig {
 
     /**
