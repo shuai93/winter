@@ -3,6 +3,9 @@ package tk.shuai93.winter.common.enums;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.core.enums.IEnum;
 import lombok.Getter;
+import org.springframework.util.Assert;
+
+import java.util.Arrays;
 
 /**
  * @Author 杨帅
@@ -22,7 +25,11 @@ public enum AgeEnum implements IEnum<Integer> {
         this.value = value;
         this.desc = desc;
     }
-
+    public static String getByCode(Integer value) {
+        return Arrays.stream(values())
+                .filter(t -> t.value == value)
+                .findFirst().get().getDesc();
+    }
     @Override
     public Integer getValue() {
         return value;

@@ -29,3 +29,5 @@ winter.iml
 /*.classpath
 /.classpath
 /.springBeans
+
+*/target/

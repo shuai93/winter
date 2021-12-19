@@ -2,6 +2,7 @@ package tk.shuai93.winter.controller;
 
 
 import tk.shuai93.winter.entity.User;
+import tk.shuai93.winter.model.vo.UserVo;
 import tk.shuai93.winter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,13 +41,13 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public User getUser() {
+    public UserVo getUser() {
         log.info("接口为" + "user");
         return userService.getUser("Jack");
     }
 
     @GetMapping("/sleep")
-    public User sleep() throws InterruptedException {
+    public UserVo sleep() throws InterruptedException {
         Random r = new Random();
         int n3 = Math.abs(r.nextInt() % 1000);
         Thread.sleep(1000 + n3);

@@ -2,6 +2,7 @@ package tk.shuai93.winter.service;
 
 import tk.shuai93.winter.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import tk.shuai93.winter.model.vo.UserVo;
 
 /**
  * <p>
@@ -13,7 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
-    User getUser(String name);
+    UserVo getUser(String name);
 
     String updateUser();
 

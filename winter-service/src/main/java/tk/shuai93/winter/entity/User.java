@@ -21,6 +21,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
 
+
     /**
      * 主键ID
      */
@@ -35,12 +36,11 @@ public class User implements Serializable {
      * 年龄
      */
 
-    private AgeEnum age;
+    private int age;
 
     /**
      * 邮箱
      */
     private String email;
-
 
 }

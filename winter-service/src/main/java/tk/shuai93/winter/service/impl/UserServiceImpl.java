@@ -3,6 +3,8 @@ package tk.shuai93.winter.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import tk.shuai93.winter.entity.User;
 import tk.shuai93.winter.mapper.UserMapper;
+import tk.shuai93.winter.model.map.UserCovertMapper;
+import tk.shuai93.winter.model.vo.UserVo;
 import tk.shuai93.winter.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -21,18 +23,23 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     final UserMapper userMapper;
+    final UserCovertMapper mapper;
 
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, UserCovertMapper mapper) {
         this.userMapper = userMapper;
+        this.mapper = mapper;
     }
 
     @Override
-    public User getUser(String name) {
+    public UserVo getUser(String name) {
         QueryWrapper<User> query = new QueryWrapper<User>();
         query.eq("name", name);
         List<User> users = userMapper.selectList(query);
-        if (!users.isEmpty())
-            return users.get(0);
+        if (!users.isEmpty()) {
+            User user = users.get(0);
+            return mapper.toVo(user);
+        }
+
         return null;
     }
 
