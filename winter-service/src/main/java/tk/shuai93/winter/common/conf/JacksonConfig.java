@@ -1,4 +1,4 @@
-package tk.shuai93.winter.common.enums.conf;
+package tk.shuai93.winter.common.conf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
